@@ -1,0 +1,10 @@
+commodity,market_name,state,model,mae,rmse,mape
+Potato,Kalipur,West Bengal,NAIVE,37.14,44.72,2.89
+Potato,Kalipur,West Bengal,SARIMAX,72.38,83.05,5.61
+Potato,Kalipur,West Bengal,LSTM,687.89,690.41,52.9
+Onion,Kalipur,West Bengal,NAIVE,57.14,75.59,4.4
+Onion,Kalipur,West Bengal,SARIMAX,360.95,416.01,27.4
+Onion,Kalipur,West Bengal,LSTM,1501.18,1536.04,112.75
+Wheat,Bishnupur(Bankura),West Bengal,NAIVE,0.0,0.0,0.0
+Wheat,Bishnupur(Bankura),West Bengal,SARIMAX,7.84,9.1,0.26
+Wheat,Bishnupur(Bankura),West Bengal,LSTM,205.44,205.45,6.85

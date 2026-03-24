@@ -1,0 +1,6 @@
+# Local datasets and generated ML artifacts
+dataset/
+
+# Python bytecode and caches
+**/__pycache__/
+*.pyc

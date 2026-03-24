@@ -1,6 +1,8 @@
-fastapi 
-uvicorn 
+fastapi
+uvicorn
 python-jose
- passlib
-  bcrypt
-  python-dotenv
+passlib
+bcrypt
+python-dotenv
+pandas
+numpy

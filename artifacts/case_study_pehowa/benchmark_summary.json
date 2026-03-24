@@ -1,0 +1,27 @@
+[
+  {
+    "series": "Potato | Pehowa, Haryana",
+    "naive": {
+      "mae": 125.0,
+      "rmse": 158.68,
+      "mape": 12.84
+    },
+    "sarimax": {
+      "order": [
+        1,
+        1,
+        2
+      ],
+      "mae": 280.51,
+      "rmse": 350.37,
+      "mape": 28.81,
+      "future_peak_price": 1065.76
+    },
+    "lstm": {
+      "mae": 94.21,
+      "rmse": 116.39,
+      "mape": 10.64,
+      "future_peak_price": 962.39
+    }
+  }
+]

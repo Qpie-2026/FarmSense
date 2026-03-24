@@ -1,0 +1,22 @@
+[
+  {
+    "series": "Potato | Kalipur, West Bengal",
+    "sarimax": {
+      "order": [
+        1,
+        1,
+        2
+      ],
+      "mae": 72.38,
+      "rmse": 83.05,
+      "mape": 5.61,
+      "future_peak_price": 1251.47
+    },
+    "lstm": {
+      "mae": 687.89,
+      "rmse": 690.41,
+      "mape": 52.9,
+      "future_peak_price": 1073.24
+    }
+  }
+]

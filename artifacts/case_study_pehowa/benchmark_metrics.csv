@@ -1,0 +1,4 @@
+commodity,market_name,state,model,mae,rmse,mape
+Potato,Pehowa,Haryana,NAIVE,125.0,158.68,12.84
+Potato,Pehowa,Haryana,SARIMAX,280.51,350.37,28.81
+Potato,Pehowa,Haryana,LSTM,94.21,116.39,10.64

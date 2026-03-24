@@ -1,0 +1,3 @@
+commodity,market_name,state,model,mae,rmse,mape
+Potato,Kalipur,West Bengal,SARIMAX,72.38,83.05,5.61
+Potato,Kalipur,West Bengal,LSTM,687.89,690.41,52.9

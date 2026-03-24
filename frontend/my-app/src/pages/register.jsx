@@ -311,7 +311,7 @@ export default function MandAIRegister() {
     const e = validate();
     if (Object.keys(e).length > 0) { setErrors(e); return; }
     alert("Account created successfully!");
-    navigate("/login");
+    navigate("/dashboard");
   };
 
   return (

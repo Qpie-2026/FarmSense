@@ -1,0 +1,77 @@
+[
+  {
+    "series": "Potato | Kalipur, West Bengal",
+    "naive": {
+      "mae": 37.14,
+      "rmse": 44.72,
+      "mape": 2.89
+    },
+    "sarimax": {
+      "order": [
+        1,
+        1,
+        2
+      ],
+      "mae": 72.38,
+      "rmse": 83.05,
+      "mape": 5.61,
+      "future_peak_price": 1251.47
+    },
+    "lstm": {
+      "mae": 687.89,
+      "rmse": 690.41,
+      "mape": 52.9,
+      "future_peak_price": 1073.24
+    }
+  },
+  {
+    "series": "Onion | Kalipur, West Bengal",
+    "naive": {
+      "mae": 57.14,
+      "rmse": 75.59,
+      "mape": 4.4
+    },
+    "sarimax": {
+      "order": [
+        1,
+        1,
+        2
+      ],
+      "mae": 360.95,
+      "rmse": 416.01,
+      "mape": 27.4,
+      "future_peak_price": 1445.65
+    },
+    "lstm": {
+      "mae": 1501.18,
+      "rmse": 1536.04,
+      "mape": 112.75,
+      "future_peak_price": 929.18
+    }
+  },
+  {
+    "series": "Wheat | Bishnupur(Bankura), West Bengal",
+    "naive": {
+      "mae": 0.0,
+      "rmse": 0.0,
+      "mape": 0.0
+    },
+    "sarimax": {
+      "order": [
+        1,
+        1,
+        2
+      ],
+      "mae": 7.84,
+      "rmse": 9.1,
+      "mape": 0.26,
+      "future_peak_price": 2994.37
+    },
+    "lstm": {
+      "mae": 205.44,
+      "rmse": 205.45,
+      "mape": 6.85,
+      "future_peak_price": 2799.32
+    }
+  }
+]

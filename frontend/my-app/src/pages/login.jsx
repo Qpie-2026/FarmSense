@@ -291,9 +291,8 @@ export default function MandAILogin() {
 
   const langs = ["English", "Hindi", "Marathi"];
   const handleSignIn = () => {
-    // Placeholder navigation until auth API is connected.
     if (phone.trim() && password.trim()) {
-      navigate("/register");
+      navigate("/dashboard");
     }
   };
 
