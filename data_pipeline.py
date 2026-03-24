@@ -30,12 +30,14 @@ import requests
 import pandas as pd
 import numpy as np
 from datetime import datetime
+from pathlib import Path
 from dotenv import load_dotenv
 
 warnings.filterwarnings("ignore")
 
 # Load keys from .env file
-load_dotenv()
+BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / ".env")
 
 # ─────────────────────────────────────────────────────────
 # CONFIG
@@ -44,12 +46,12 @@ load_dotenv()
 API_KEY         = os.getenv("DATAGOV_API_KEY", "")
 OPENWEATHER_KEY = os.getenv("OPENWEATHER_API_KEY", "")
 
-DATA_DIR      = "./data"
-OUTPUT_PATH   = os.path.join(DATA_DIR, "master_clean.csv")
-EDA_PATH      = os.path.join(DATA_DIR, "eda_report.txt")
+DATA_DIR      = BASE_DIR / "data"
+OUTPUT_PATH   = DATA_DIR / "master_clean.csv"
+EDA_PATH      = DATA_DIR / "eda_report.txt"
 
-MANDI_CSV     = os.path.join(DATA_DIR, "Mandi.csv")
-AGMARKNET_CSV = os.path.join(DATA_DIR, "agmarknet.csv")
+MANDI_CSV     = DATA_DIR / "Mandi.csv"
+AGMARKNET_CSV = DATA_DIR / "agmarknet.csv"
 
 TARGET_COMMODITIES = ["Tomato", "Onion", "Potato", "Wheat", "Dry Chillies"]
 TARGET_STATES = [
@@ -300,8 +302,9 @@ def clean(df: pd.DataFrame) -> pd.DataFrame:
         lo = grp["modal_price"].quantile(0.01)
         hi = grp["modal_price"].quantile(0.99)
         return grp[(grp["modal_price"] >= lo) & (grp["modal_price"] <= hi)]
-        df = df.groupby("commodity", group_keys=False).apply(remove_outliers).reset_index(drop=True)
-        print(f"  Rows after outlier removal: {len(df):,}")
+
+    df = df.groupby("commodity", group_keys=False).apply(remove_outliers).reset_index(drop=True)
+    print(f"  Rows after outlier removal: {len(df):,}")
 
     # 7. Deduplication (SAFE)
     required_cols = ["date", "state", "market", "commodity", "modal_price"]
@@ -402,7 +405,7 @@ def save_and_report(df: pd.DataFrame):
         ]
 
     report = "\n".join(lines)
-    with open(EDA_PATH, "w") as f:
+    with open(EDA_PATH, "w", encoding="utf-8") as f:
         f.write(report)
     print(report)
 
