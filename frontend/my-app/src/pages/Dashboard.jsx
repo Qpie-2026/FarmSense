@@ -386,7 +386,7 @@ export default function Dashboard() {
       </section>
 
       <section className="control-bar">
-        <label className="panel control-field">
+        <label className="panel control-field control-field--commodity">
           <span className="eyebrow">Commodity</span>
           <select value={commodity} onChange={(event) => setCommodity(event.target.value)}>
             {options.commodities.map((item) => (
@@ -395,9 +395,10 @@ export default function Dashboard() {
               </option>
             ))}
           </select>
+          <p className="control-field__preview">Selected commodity: {commodity}</p>
         </label>
 
-        <label className="panel control-field">
+        <label className="panel control-field control-field--market">
           <span className="eyebrow">Market</span>
           <select
             value={`${marketSelection.market}|||${marketSelection.state}`}
@@ -417,6 +418,9 @@ export default function Dashboard() {
               </option>
             ))}
           </select>
+          <p className="control-field__preview">
+            Selected mandi: {selectedMarketMeta?.label || `${marketSelection.market}, ${marketSelection.state}`}
+          </p>
         </label>
 
         <article className="panel control-field control-field--static">
