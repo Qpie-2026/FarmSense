@@ -14,9 +14,10 @@ ENV/
 
 # 🐍 Python cache & compiled files
 
-**pycache**/
+__pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 
 # 📦 Distribution / packaging
 
