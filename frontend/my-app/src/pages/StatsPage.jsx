@@ -1,29 +1,43 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const C = {
-  bg: "#0d1117",
-  surface: "#151c27",
-  surfaceAlt: "#1a2333",
-  border: "#1f2d3d",
-  green: "#22c55e",
-  greenDim: "#166534",
+  bg: "#050a14",
+  surface: "rgba(16, 24, 42, 0.78)",
+  surfaceAlt: "rgba(30, 41, 59, 0.7)",
+  border: "rgba(148, 163, 184, 0.22)",
+  green: "#34d399",
+  greenDim: "rgba(16, 185, 129, 0.22)",
   greenBg: "#0f2d1a",
   orange: "#f59e0b",
   red: "#ef4444",
-  text: "#e2e8f0",
-  muted: "#64748b",
+  text: "#e5edf9",
+  muted: "#8ca3bf",
   white: "#ffffff",
 };
 
 const s = {
   app: {
-    background: C.bg,
+    background: "linear-gradient(180deg, #050a14 0%, #071526 46%, #081023 100%)",
     minHeight: "100vh",
     color: C.text,
     fontFamily: "'DM Sans', sans-serif",
     maxWidth: 430,
     margin: "0 auto",
     paddingBottom: 80,
+    position: "relative",
+    overflow: "hidden",
+  },
+  glowTop: {
+    position: "absolute",
+    width: 280,
+    height: 280,
+    borderRadius: "50%",
+    background: "radial-gradient(circle, rgba(52,211,153,0.24) 0%, rgba(52,211,153,0) 72%)",
+    top: -120,
+    left: -80,
+    pointerEvents: "none",
+    filter: "blur(6px)",
   },
 
   // Header
@@ -56,6 +70,8 @@ const s = {
     margin: "0 16px 16px",
     background: C.surface, border: `1px solid ${C.border}`,
     borderRadius: 20, padding: "20px",
+    boxShadow: "0 10px 30px rgba(0, 0, 0, 0.28)",
+    backdropFilter: "blur(8px)",
   },
   cardTitle: { fontSize: 20, fontWeight: 800, color: C.white, lineHeight: 1.2 },
   cardSub: { fontSize: 12, color: C.muted, marginTop: 3, marginBottom: 16 },
@@ -136,6 +152,8 @@ const s = {
     margin: "0 16px 16px",
     background: C.surface, border: `1px solid ${C.border}`,
     borderRadius: 20, padding: "20px", position: "relative", overflow: "hidden",
+    boxShadow: "0 10px 30px rgba(0, 0, 0, 0.28)",
+    backdropFilter: "blur(8px)",
   },
   liveBadge: {
     display: "inline-flex", alignItems: "center", gap: 6,
@@ -227,9 +245,10 @@ const s = {
   // Bottom nav
   bottomNav: {
     position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)",
-    width: "100%", maxWidth: 430, background: C.surface,
-    borderTop: `1px solid ${C.border}`,
+    width: "100%", maxWidth: 430, background: "rgba(10, 18, 32, 0.86)",
+    borderTop: `1px solid rgba(148, 163, 184, 0.25)`,
     display: "flex", justifyContent: "space-around", padding: "10px 0 14px",
+    backdropFilter: "blur(12px)",
   },
   navItem: (active) => ({
     display: "flex", flexDirection: "column", alignItems: "center",
@@ -559,11 +578,36 @@ const NAV = [
 ];
 
 function BottomNav() {
+  const navigate = useNavigate();
   const [active, setActive] = useState("Stats");
+
+  const handleClick = (label) => {
+    setActive(label);
+    if (label === "Mandi") {
+      navigate("/comparison");
+      return;
+    }
+    if (label === "Home") {
+      navigate("/dashboard");
+      return;
+    }
+    if (label === "Forecast") {
+      navigate("/forecast");
+      return;
+    }
+    if (label === "Stats") {
+      navigate("/stats");
+      return;
+    }
+    if (label === "Profile") {
+      navigate("/profile");
+    }
+  };
+
   return (
     <nav style={s.bottomNav}>
       {NAV.map((n) => (
-        <div key={n.label} style={s.navItem(active === n.label)} onClick={() => setActive(n.label)}>
+        <div key={n.label} style={s.navItem(active === n.label)} onClick={() => handleClick(n.label)}>
           <span style={{ fontSize: 20 }}>{n.icon}</span>
           {n.label}
         </div>
@@ -599,6 +643,7 @@ export default function StatsPage() {
       `}</style>
 
       <div style={s.app}>
+        <div style={s.glowTop} />
 
         {/* Header */}
         <header style={s.header}>

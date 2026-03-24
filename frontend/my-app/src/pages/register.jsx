@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
@@ -271,6 +272,15 @@ const styles = `
     margin-top: 5px;
     padding-left: 4px;
   }
+
+  .api-msg {
+    text-align: center;
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  .api-msg.error { color: #ff7a7a; }
+  .api-msg.success { color: #3ddc84; }
 `;
 
 const crops = [
@@ -289,7 +299,10 @@ export default function MandAIRegister() {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
+  const [apiState, setApiState] = useState({ type: "", message: "" });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
   const update = (field, value) => {
     setForm(f => ({ ...f, [field]: value }));
@@ -307,11 +320,32 @@ export default function MandAIRegister() {
     return e;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const e = validate();
     if (Object.keys(e).length > 0) { setErrors(e); return; }
-    alert("Account created successfully!");
-    navigate("/login");
+    try {
+      setLoading(true);
+      setApiState({ type: "", message: "" });
+      const { data } = await axios.post(`${API_BASE_URL}/api/auth/register`, {
+        fullName: form.fullName.trim(),
+        mobile: form.mobile.trim(),
+        crop: form.crop,
+        location: form.location.trim(),
+        password: form.password,
+      });
+      if (data?.access_token) {
+        localStorage.setItem("token", data.access_token);
+      }
+      setApiState({ type: "success", message: data?.message || "Account created successfully." });
+      navigate("/login");
+    } catch (error) {
+      setApiState({
+        type: "error",
+        message: error?.response?.data?.detail || "Registration failed. Please try again.",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -453,8 +487,14 @@ export default function MandAIRegister() {
             {errors.confirmPassword && <p className="error-msg">{errors.confirmPassword}</p>}
           </div>
 
-          <button className="cta-btn" onClick={handleSubmit}>
-            Create Farmer Account
+          {apiState.message && (
+            <p className={`api-msg ${apiState.type === "error" ? "error" : "success"}`}>
+              {apiState.message}
+            </p>
+          )}
+
+          <button className="cta-btn" onClick={handleSubmit} disabled={loading}>
+            {loading ? "Creating Account..." : "Create Farmer Account"}
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"/>
               <polyline points="12 5 19 12 12 19"/>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap');
@@ -216,6 +217,7 @@ const UserIcon = () => <Ico><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/
 // ── MAIN ──────────────────────────────────────────────────────────────────
 
 export default function MandAIProfile() {
+  const navigate = useNavigate();
   const [priceAlerts, setPriceAlerts] = useState(true);
   const [darkMode, setDarkMode] = useState(true);
   const [activeNav, setActiveNav] = useState("PROFILE");
@@ -238,6 +240,28 @@ export default function MandAIProfile() {
     { id: "FORECAST", icon: <SignalIcon /> }, { id: "STATS", icon: <BarIcon /> },
     { id: "PROFILE", icon: <UserIcon /> },
   ];
+  const handleNavClick = (id) => {
+    setActiveNav(id);
+    if (id === "HOME") {
+      navigate("/dashboard");
+      return;
+    }
+    if (id === "MANDI") {
+      navigate("/comparison");
+      return;
+    }
+    if (id === "FORECAST") {
+      navigate("/forecast");
+      return;
+    }
+    if (id === "STATS") {
+      navigate("/stats");
+      return;
+    }
+    if (id === "PROFILE") {
+      navigate("/profile");
+    }
+  };
   const initials = `${profile.firstName[0]}${profile.lastName[0]}`;
 
   return (
@@ -357,7 +381,7 @@ export default function MandAIProfile() {
         {/* BOTTOM NAV */}
         <nav className="bottom-nav">
           {navItems.map(item => (
-            <div key={item.id} className={`nav-item ${activeNav === item.id ? "active" : "inactive"}`} onClick={() => setActiveNav(item.id)}>
+            <div key={item.id} className={`nav-item ${activeNav === item.id ? "active" : "inactive"}`} onClick={() => handleNavClick(item.id)}>
               {item.icon}
               <span className="nav-label">{item.id}</span>
             </div>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap');
@@ -324,6 +325,7 @@ const TruckIcon = () => (
 
 // ── COMPONENT ─────────────────────────────────────────────────────────────
 export default function MandAIForecast() {
+  const navigate = useNavigate();
   const [activeNav, setActiveNav] = useState("FORECAST");
 
   const days = [
@@ -339,6 +341,29 @@ export default function MandAIForecast() {
     { id: "STATS", icon: <BarChartIcon /> },
     { id: "PROFILE", icon: <UserIcon /> },
   ];
+
+  const handleNavClick = (id) => {
+    setActiveNav(id);
+    if (id === "HOME") {
+      navigate("/dashboard");
+      return;
+    }
+    if (id === "MANDI") {
+      navigate("/comparison");
+      return;
+    }
+    if (id === "FORECAST") {
+      navigate("/forecast");
+      return;
+    }
+    if (id === "STATS") {
+      navigate("/stats");
+      return;
+    }
+    if (id === "PROFILE") {
+      navigate("/profile");
+    }
+  };
 
   return (
     <>
@@ -476,7 +501,7 @@ export default function MandAIForecast() {
             <div
               key={item.id}
               className={`nav-item ${activeNav === item.id ? "active" : "inactive"}`}
-              onClick={() => setActiveNav(item.id)}
+              onClick={() => handleNavClick(item.id)}
             >
               {item.icon}
               <span className="nav-label">{item.id}</span>

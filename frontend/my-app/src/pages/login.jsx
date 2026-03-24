@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
@@ -281,19 +282,51 @@ const styles = `
   }
 
   .register-link:hover { text-decoration: underline; }
+
+  .api-msg {
+    text-align: center;
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  .api-msg.error { color: #ff7a7a; }
+  .api-msg.success { color: #3ddc84; }
 `;
 
 export default function MandAILogin() {
   const [lang, setLang] = useState("English");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [apiState, setApiState] = useState({ type: "", message: "" });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
   const langs = ["English", "Hindi", "Marathi"];
-  const handleSignIn = () => {
-    // Placeholder navigation until auth API is connected.
-    if (phone.trim() && password.trim()) {
-      navigate("/register");
+  const handleSignIn = async () => {
+    if (!phone.trim() || !password.trim()) {
+      setApiState({ type: "error", message: "Please enter mobile number and password." });
+      return;
+    }
+    try {
+      setLoading(true);
+      setApiState({ type: "", message: "" });
+      const { data } = await axios.post(`${API_BASE_URL}/api/auth/login`, {
+        mobile: phone.trim(),
+        password: password.trim(),
+      });
+      if (data?.access_token) {
+        localStorage.setItem("token", data.access_token);
+      }
+      setApiState({ type: "success", message: data?.message || "Login successful." });
+      navigate("/dashboard");
+    } catch (error) {
+      setApiState({
+        type: "error",
+        message: error?.response?.data?.detail || "Login failed. Please try again.",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -364,7 +397,7 @@ export default function MandAILogin() {
                   type="tel"
                   placeholder="9876543210"
                   value={phone}
-                  onChange={e => setPhone(e.target.value)}
+                  onChange={e => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
                   maxLength={10}
                 />
               </div>
@@ -385,7 +418,15 @@ export default function MandAILogin() {
               </div>
             </div>
 
-            <button className="sign-btn" onClick={handleSignIn}>Sign In to Dashboard</button>
+            {apiState.message && (
+              <p className={`api-msg ${apiState.type === "error" ? "error" : "success"}`}>
+                {apiState.message}
+              </p>
+            )}
+
+            <button className="sign-btn" onClick={handleSignIn} disabled={loading}>
+              {loading ? "Signing In..." : "Sign In to Dashboard"}
+            </button>
 
             <div className="security-badge">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">

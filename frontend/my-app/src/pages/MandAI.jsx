@@ -1,37 +1,64 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // ── Colour tokens ──────────────────────────────────────────────
 const C = {
-  bg: "#0d1117",
-  surface: "#151c27",
-  surfaceAlt: "#1a2333",
-  border: "#1f2d3d",
-  green: "#22c55e",
-  greenDim: "#166534",
-  orange: "#f59e0b",
-  orangeDim: "#78350f",
-  text: "#e2e8f0",
-  muted: "#64748b",
+  bg: "#050a14",
+  surface: "rgba(16, 24, 42, 0.78)",
+  surfaceAlt: "rgba(30, 41, 59, 0.7)",
+  border: "rgba(148, 163, 184, 0.22)",
+  green: "#34d399",
+  greenDim: "rgba(16, 185, 129, 0.22)",
+  orange: "#fbbf24",
+  orangeDim: "rgba(251, 191, 36, 0.2)",
+  text: "#e5edf9",
+  muted: "#8ca3bf",
   white: "#ffffff",
 };
 
 // ── Tiny helpers ───────────────────────────────────────────────
 const styles = {
   app: {
-    background: C.bg,
+    background: "linear-gradient(180deg, #050a14 0%, #071526 46%, #081023 100%)",
     minHeight: "100vh",
     color: C.text,
     fontFamily: "'DM Sans', sans-serif",
-    maxWidth: 430,
+    maxWidth: 440,
     margin: "0 auto",
-    paddingBottom: 80,
+    paddingBottom: 92,
+    position: "relative",
+    overflow: "hidden",
+  },
+  glowTop: {
+    position: "absolute",
+    width: 280,
+    height: 280,
+    borderRadius: "50%",
+    background: "radial-gradient(circle, rgba(52,211,153,0.26) 0%, rgba(52,211,153,0) 72%)",
+    top: -120,
+    left: -80,
+    pointerEvents: "none",
+    filter: "blur(6px)",
+  },
+  glowRight: {
+    position: "absolute",
+    width: 260,
+    height: 260,
+    borderRadius: "50%",
+    background: "radial-gradient(circle, rgba(59,130,246,0.2) 0%, rgba(59,130,246,0) 72%)",
+    top: 140,
+    right: -110,
+    pointerEvents: "none",
+    filter: "blur(8px)",
   },
   // Header
   header: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "18px 20px",
+    padding: "20px 20px 16px",
+    position: "relative",
+    zIndex: 2,
   },
   logo: {
     display: "flex",
@@ -58,7 +85,7 @@ const styles = {
     overflowX: "auto",
   },
   chip: {
-    background: C.surfaceAlt,
+    background: "rgba(15, 23, 42, 0.75)",
     border: `1px solid ${C.border}`,
     borderRadius: 22,
     padding: "8px 16px",
@@ -77,6 +104,8 @@ const styles = {
     borderRadius: 18,
     padding: "20px",
     margin: "0 16px 14px",
+    boxShadow: "0 10px 30px rgba(0, 0, 0, 0.28)",
+    backdropFilter: "blur(8px)",
   },
   // Live price card
   liveDot: {
@@ -141,7 +170,7 @@ const styles = {
   },
   // AI Recommendation card
   aiCard: {
-    background: C.surface,
+    background: "linear-gradient(140deg, rgba(26,35,53,0.92) 0%, rgba(15,23,42,0.92) 100%)",
     border: `1px solid ${C.border}`,
     borderLeft: `4px solid ${C.orange}`,
     borderRadius: 18,
@@ -186,6 +215,8 @@ const styles = {
     borderRadius: 16,
     padding: "18px 16px",
     cursor: "pointer",
+    transition: "transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease",
+    boxShadow: "0 6px 16px rgba(0, 0, 0, 0.22)",
   },
   featureIcon: (bg) => ({
     width: 38,
@@ -244,11 +275,12 @@ const styles = {
     transform: "translateX(-50%)",
     width: "100%",
     maxWidth: 430,
-    background: C.surface,
-    borderTop: `1px solid ${C.border}`,
+    background: "rgba(10, 18, 32, 0.86)",
+    borderTop: `1px solid rgba(148, 163, 184, 0.25)`,
     display: "flex",
     justifyContent: "space-around",
     padding: "10px 0 14px",
+    backdropFilter: "blur(12px)",
   },
   navItem: (active) => ({
     display: "flex",
@@ -267,13 +299,20 @@ const styles = {
 
 // ── Sub-components ─────────────────────────────────────────────
 
-function Header() {
+function Header({ name }) {
   return (
     <header style={styles.header}>
       <div style={styles.logo}>
         <span>📍</span> MandAI
       </div>
-      <button style={styles.langBtn}>मराठी</button>
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        {name ? (
+          <div style={{ fontSize: 12, color: C.green, fontWeight: 700 }}>
+            Hi, {name}
+          </div>
+        ) : null}
+        <button style={styles.langBtn}>मराठी</button>
+      </div>
     </header>
   );
 }
@@ -379,11 +418,11 @@ const FEATURES = [
   },
 ];
 
-function FeatureGrid() {
+function FeatureGrid({ onFeatureClick }) {
   return (
     <div style={styles.featureGrid}>
       {FEATURES.map((f) => (
-        <div key={f.title} style={styles.featureCard}>
+        <div className="feature-card" key={f.title} style={styles.featureCard} onClick={() => onFeatureClick(f.title)}>
           <div style={styles.featureIcon(f.bg)}>{f.icon}</div>
           <div style={styles.featureTitle}>{f.title}</div>
           <div style={styles.featureSubtitle}>{f.sub}</div>
@@ -444,15 +483,21 @@ const NAV = [
   { icon: "👤", label: "Profile" },
 ];
 
-function BottomNav() {
-  const [active, setActive] = useState("Home");
+function BottomNav({ onNavClick }) {
+  const [active, setActive] = useState("Mandi");
+
+  const handleClick = (label) => {
+    setActive(label);
+    onNavClick(label);
+  };
+
   return (
     <nav style={styles.bottomNav}>
       {NAV.map((n) => (
         <div
           key={n.label}
           style={styles.navItem(active === n.label)}
-          onClick={() => setActive(n.label)}
+          onClick={() => handleClick(n.label)}
         >
           <span style={styles.navIcon}>{n.icon}</span>
           {n.label}
@@ -464,12 +509,89 @@ function BottomNav() {
 
 // ── Page ───────────────────────────────────────────────────────
 export default function MandAI() {
+  const navigate = useNavigate();
+  const [userName, setUserName] = useState("");
+
+  const decodeJwtPayload = (token) => {
+    try {
+      const payloadPart = (token || "").split(".")[1];
+      if (!payloadPart) return null;
+      const base64 = payloadPart.replace(/-/g, "+").replace(/_/g, "/");
+      const padded = base64 + "=".repeat((4 - (base64.length % 4)) % 4);
+      const json = atob(padded);
+      return JSON.parse(json);
+    } catch {
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login", { replace: true });
+      return;
+    }
+
+    try {
+      const payload = decodeJwtPayload(token);
+      setUserName(payload?.name || payload?.sub || "");
+    } catch {
+      // If token is invalid, treat as logged out.
+      navigate("/login", { replace: true });
+    }
+  }, [navigate]);
+
+  const handleFeatureClick = (title) => {
+    if (title === "Price Forecast") {
+      navigate("/forecast");
+      return;
+    }
+    if (title === "Best Sell Time") {
+      navigate("/stats");
+      return;
+    }
+    if (title === "Mandi Comparison") {
+      navigate("/comparison");
+      return;
+    }
+    if (title === "Weather Impact") {
+      navigate("/weather");
+    }
+  };
+
+  const handleBottomNavClick = (label) => {
+    if (label === "Mandi") {
+      navigate("/comparison");
+      return;
+    }
+    if (label === "Home") {
+      navigate("/dashboard");
+      return;
+    }
+    if (label === "Forecast") {
+      navigate("/forecast");
+      return;
+    }
+    if (label === "Stats") {
+      navigate("/stats");
+      return;
+    }
+    if (label === "Profile") {
+      navigate("/profile");
+    }
+  };
+
   return (
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: ${C.bg}; }
+        .feature-card:hover {
+          transform: translateY(-4px);
+          border-color: rgba(52, 211, 153, 0.6);
+          box-shadow: 0 14px 26px rgba(3, 9, 22, 0.45);
+        }
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.3; }
@@ -477,13 +599,15 @@ export default function MandAI() {
       `}</style>
 
       <div style={styles.app}>
-        <Header />
+        <div style={styles.glowTop} />
+        <div style={styles.glowRight} />
+        <Header name={userName} />
         <CropMandiSelector />
         <LiveMarketPriceCard />
         <AIRecommendationCard />
-        <FeatureGrid />
+        <FeatureGrid onFeatureClick={handleFeatureClick} />
         <MarketSaturationCard />
-        <BottomNav />
+        <BottomNav onNavClick={handleBottomNavClick} />
       </div>
     </>
   );
