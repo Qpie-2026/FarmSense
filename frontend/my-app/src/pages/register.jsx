@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
@@ -288,6 +289,7 @@ export default function MandAIRegister() {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const update = (field, value) => {
     setForm(f => ({ ...f, [field]: value }));
@@ -309,6 +311,7 @@ export default function MandAIRegister() {
     const e = validate();
     if (Object.keys(e).length > 0) { setErrors(e); return; }
     alert("Account created successfully!");
+    navigate("/login");
   };
 
   return (
@@ -460,7 +463,7 @@ export default function MandAIRegister() {
 
           <p className="signin-row">
             Already have an account?
-            <a className="signin-link" href="#">Sign In</a>
+            <Link className="signin-link" to="/login">Sign In</Link>
           </p>
         </div>
 

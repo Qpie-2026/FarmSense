@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
@@ -286,8 +287,15 @@ export default function MandAILogin() {
   const [lang, setLang] = useState("English");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const langs = ["English", "Hindi", "Marathi"];
+  const handleSignIn = () => {
+    // Placeholder navigation until auth API is connected.
+    if (phone.trim() && password.trim()) {
+      navigate("/register");
+    }
+  };
 
   return (
     <>
@@ -377,7 +385,7 @@ export default function MandAILogin() {
               </div>
             </div>
 
-            <button className="sign-btn">Sign In to Dashboard</button>
+            <button className="sign-btn" onClick={handleSignIn}>Sign In to Dashboard</button>
 
             <div className="security-badge">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -389,7 +397,7 @@ export default function MandAILogin() {
 
             <p className="register-row">
               Don't have an account?{" "}
-              <a className="register-link" href="#">Register as Farmer</a>
+              <Link className="register-link" to="/register">Register as Farmer</Link>
             </p>
           </div>
         </div>
