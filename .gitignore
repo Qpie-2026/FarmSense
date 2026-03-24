@@ -1,10 +1,15 @@
+# env
+.env
+
+# virtual env
 .venv/
 venv/
-.env
-__pycache__/
-*.pyc
-*.csv
-*.pkl
-*.h5
-*.pt
+
+# data
 data/
+*.csv
+
+# models
+*.pkl
+*.pt
+*.h5
