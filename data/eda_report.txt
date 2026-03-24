@@ -1,0 +1,31 @@
+============================================================
+EDA REPORT -- master_clean.csv
+============================================================
+Generated  : 2026-03-24 11:48:47
+Total rows : 143,889
+Date range : 2023-01-07 to 2026-03-24
+Sources    : {'mandi_kaggle': 143813, 'datagov_api': 76}
+
+-- Onion --
+   Rows       : 57,495
+   Date range : 2023-01-07 to 2026-03-24
+   States     : ['Andhra Pradesh', 'Karnataka', 'Madhya Pradesh', 'Maharashtra', 'Punjab', 'Uttar Pradesh']
+   Modal price: min=8  mean=2153  max=21000  std=1066
+
+-- Potato --
+   Rows       : 57,605
+   Date range : 2023-01-07 to 2026-03-24
+   States     : ['Andhra Pradesh', 'Karnataka', 'Madhya Pradesh', 'Maharashtra', 'Punjab', 'Uttar Pradesh']
+   Modal price: min=13  mean=1419  max=32250  std=648
+
+-- Tomato --
+   Rows       : 5,619
+   Date range : 2023-01-07 to 2026-03-24
+   States     : ['Andhra Pradesh', 'Karnataka', 'Madhya Pradesh', 'Maharashtra', 'Punjab', 'Uttar Pradesh']
+   Modal price: min=25  mean=3775  max=150000  std=3486
+
+-- Wheat --
+   Rows       : 23,170
+   Date range : 2023-01-07 to 2026-03-24
+   States     : ['Andhra Pradesh', 'Karnataka', 'Madhya Pradesh', 'Maharashtra', 'Punjab', 'Uttar Pradesh']
+   Modal price: min=1000  mean=2429  max=8100  std=307
