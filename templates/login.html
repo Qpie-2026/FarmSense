@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PureZone Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body class="market-body">
+    <div class="bg-grain"></div>
+    <main class="auth-shell">
+      <section class="auth-panel glass-panel">
+        <div class="badge-row">
+          <span class="badge">Traditional Market Intelligence</span>
+          <span class="badge badge-soft">Live Weather + Price Forecast</span>
+        </div>
+        <h1 class="hero-title">PureZone Bazaar Board</h1>
+        <p class="hero-copy">
+          Step into a digital mandi dashboard designed for farmers and policymakers.
+          Sign in with simple details to track live weather, current rates, and future price movement.
+        </p>
+
+        {% if error %}
+        <div class="form-error">{{ error }}</div>
+        {% endif %}
+
+        <form class="auth-form" method="post" action="{{ url_for('login_submit') }}">
+          <label class="field">
+            <span>Name</span>
+            <input
+              type="text"
+              name="name"
+              placeholder="Enter your name"
+              value="{{ form_data.name if form_data else '' }}"
+              required
+            />
+          </label>
+
+          <label class="field">
+            <span>Email ID</span>
+            <input
+              type="email"
+              name="email"
+              placeholder="farmer@example.com"
+              value="{{ form_data.email if form_data else '' }}"
+              required
+            />
+          </label>
+
+          <label class="field">
+            <span>Default Location</span>
+            <select name="preferred_location">
+              {% set selected_location = form_data.preferred_location if form_data else 'pune' %}
+              <option value="pune" {% if selected_location == 'pune' %}selected{% endif %}>Pune</option>
+              <option value="nashik" {% if selected_location == 'nashik' %}selected{% endif %}>Nashik</option>
+              <option value="hyderabad" {% if selected_location == 'hyderabad' %}selected{% endif %}>Hyderabad</option>
+              <option value="bengaluru" {% if selected_location == 'bengaluru' %}selected{% endif %}>Bengaluru</option>
+              <option value="lucknow" {% if selected_location == 'lucknow' %}selected{% endif %}>Lucknow</option>
+              <option value="indore" {% if selected_location == 'indore' %}selected{% endif %}>Indore</option>
+            </select>
+          </label>
+
+          <button class="primary-btn" type="submit">Enter Marketplace</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

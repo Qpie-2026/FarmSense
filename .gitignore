@@ -2,3 +2,18 @@
 *.pkl
 
 # Include any other global ignores as needed
+
+# env
+.env
+
+# virtual env
+.venv/
+venv/
+
+# data
+data/
+*.csv
+
+# models
+*.pt
+*.h5
