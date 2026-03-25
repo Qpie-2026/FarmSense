@@ -1,0 +1,4 @@
+# Ignore model artifacts
+*.pkl
+
+# Include any other global ignores as needed
