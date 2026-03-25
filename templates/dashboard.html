@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PureZone Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body class="market-body">
+    <div class="bg-grain"></div>
+    <main class="dashboard-shell">
+      <header class="dashboard-topbar glass-panel">
+        <div class="topbar-left">
+          <label class="selector-label" for="location-select">Market Location</label>
+          <select id="location-select" class="location-select">
+            {% for location in locations %}
+            <option
+              value="{{ location.id }}"
+              {% if location.id == default_location.id %}selected{% endif %}
+            >
+              {{ location.label }}, {{ location.region }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="topbar-center">
+          <p class="market-kicker">PureZone Mandi Forecast</p>
+          <h1 class="market-title">Traditional Commodity Board</h1>
+        </div>
+
+        <div class="topbar-right">
+          <div class="user-meta">
+            <span class="user-name">{{ user.name }}</span>
+            <span class="user-email">{{ user.email }}</span>
+          </div>
+          <form method="post" action="{{ url_for('logout') }}">
+            <button type="submit" class="ghost-btn">Logout</button>
+          </form>
+        </div>
+      </header>
+
+      <section class="hero-grid">
+        <article class="glass-panel hero-card">
+          <p class="section-tag">Weather Window</p>
+          <div id="weather-summary" class="weather-summary">
+            <div class="loading-copy">Fetching live weather...</div>
+          </div>
+        </article>
+
+        <article class="glass-panel hero-card">
+          <p class="section-tag">Market Pulse</p>
+          <div id="market-summary" class="summary-metrics">
+            <div class="loading-copy">Loading current price outlook...</div>
+          </div>
+        </article>
+      </section>
+
+      <section class="glass-panel insight-strip">
+        <div>
+          <p class="section-tag">Forecast Note</p>
+          <p id="forecast-note" class="insight-copy">
+            Preparing live recommendation cards for the selected market...
+          </p>
+        </div>
+      </section>
+
+      <section id="status-banner" class="status-banner hidden"></section>
+
+      <section class="cards-header">
+        <div class="cards-header-copy">
+          <p class="section-tag">Commodity Predictions</p>
+          <h2 id="cards-title" class="section-title">Today’s mandi board with 7-day outlook</h2>
+        </div>
+        <div class="forecast-toggle glass-panel" role="tablist" aria-label="Forecast horizon selector">
+          <button class="toggle-btn active" data-horizon="7" type="button">7 Days</button>
+          <button class="toggle-btn" data-horizon="15" type="button">15 Days</button>
+          <button class="toggle-btn" data-horizon="30" type="button">30 Days</button>
+        </div>
+      </section>
+
+      <section id="cards-grid" class="cards-grid">
+        <article class="glass-panel commodity-card loading-card">
+          <div class="loading-copy">Preparing prediction cards...</div>
+        </article>
+      </section>
+    </main>
+
+    <script>
+      window.__PUREZONE_BOOTSTRAP__ = {
+        defaultLocation: "{{ default_location.id }}",
+        userName: "{{ user.name }}",
+      };
+    </script>
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+  </body>
+</html>
